@@ -131,8 +131,17 @@ def append_kv_cache(kv_cache, new_k, new_v):
 
     return kv_cache
 
-# Step 14 - scaled_dot_product_attention_with_cache (not yet solved)
-# TODO: implement
+# Step 14 - scaled_dot_product_attention_with_cache
+import numpy as np
+
+def scaled_dot_product_attention_with_cache(queries, kv_cache, query_offset=0):
+    """Causal scaled dot-product attention of queries against a KV cache."""
+    # TODO: combine score, scale, mask, softmax, and weighted value sum primitives.
+    scores = compute_attention_scores(queries, kv_cache['k'])
+    scores = scale_attention_scores(scores, queries.shape[-1])
+    scores = apply_causal_mask(scores, query_offset)
+    probs = softmax_attention_weights(scores)
+    return weighted_value_sum(probs, kv_cache['v'])
 
 # Step 15 - apply_output_projection (not yet solved)
 # TODO: implement
