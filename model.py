@@ -75,8 +75,11 @@ def compute_attention_scores(queries, keys):
     # TODO: return the (Tq, Tk) matrix of raw dot-product scores between queries and keys.
     return queries @ keys.T
 
-# Step 8 - scale_attention_scores (not yet solved)
-# TODO: implement
+# Step 8 - scale_attention_scores
+def scale_attention_scores(scores, d_head):
+    # TODO: scale raw attention scores by 1/sqrt(d_head) for numerical stability.
+    scale = 1/(d_head**0.5)
+    return scores * scale
 
 # Step 9 - apply_causal_mask (not yet solved)
 # TODO: implement
