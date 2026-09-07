@@ -188,8 +188,15 @@ def compute_mean_variance(x, eps=1e-5):
     # TODO: return (mean, var) reduced along the last axis with that axis kept
     return x.mean(axis=-1, keepdims=True), x.var(axis=-1, keepdims=True)
 
-# Step 21 - layer_norm_apply (not yet solved)
-# TODO: implement
+# Step 21 - layer_norm_apply
+import numpy as np
+
+def layer_norm_apply(x, ln_params, eps=1e-5):
+    """Normalize x over its last axis and apply gamma, beta."""
+    # TODO: normalize x across its last axis and apply the affine transform.
+    mean, var = compute_mean_variance(x, eps)
+    norm = (x - mean)/np.sqrt(var + eps)
+    return ln_params['gamma'] * norm + ln_params['beta']
 
 # Step 22 - residual_add_and_norm (not yet solved)
 # TODO: implement
