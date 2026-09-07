@@ -174,8 +174,11 @@ def ffn_second_layer(h, ffn_params):
     # TODO: apply the second FFN linear layer mapping (T, d_ff) back to (T, d_model).
     return linear_projection(h, ffn_params['W2'], ffn_params.get('b2', None))
 
-# Step 19 - position_wise_feed_forward (not yet solved)
-# TODO: implement
+# Step 19 - position_wise_feed_forward
+def position_wise_feed_forward(x, ffn_params):
+    # TODO: apply the FFN as two linear layers with a GELU between them
+    h = ffn_first_layer_gelu(x, ffn_params)
+    return ffn_second_layer(h, ffn_params)
 
 # Step 20 - compute_mean_variance (not yet solved)
 # TODO: implement
