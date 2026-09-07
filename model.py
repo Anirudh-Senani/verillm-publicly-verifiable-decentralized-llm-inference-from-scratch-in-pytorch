@@ -198,8 +198,12 @@ def layer_norm_apply(x, ln_params, eps=1e-5):
     norm = (x - mean)/np.sqrt(var + eps)
     return ln_params['gamma'] * norm + ln_params['beta']
 
-# Step 22 - residual_add_and_norm (not yet solved)
-# TODO: implement
+# Step 22 - residual_add_and_norm
+import numpy as np
+
+def residual_add_and_norm(x, sublayer_output, ln_params, eps=1e-5):
+    # TODO: combine the residual connection with layer normalization over the feature axis.
+    return layer_norm_apply(x + sublayer_output, ln_params, eps)
 
 # Step 23 - transformer_block (not yet solved)
 # TODO: implement
