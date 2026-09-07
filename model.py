@@ -81,8 +81,13 @@ def scale_attention_scores(scores, d_head):
     scale = 1/(d_head**0.5)
     return scores * scale
 
-# Step 9 - apply_causal_mask (not yet solved)
-# TODO: implement
+# Step 9 - apply_causal_mask
+def apply_causal_mask(scores, query_offset=0):
+    # TODO: mask entries where key index > query_offset + query row index with -inf.
+    mask = np.full((scores.shape[-2:]), -np.inf)
+    mask = np.triu(mask, k=query_offset+1)
+
+    return scores + mask
 
 # Step 10 - softmax_attention_weights (not yet solved)
 # TODO: implement
