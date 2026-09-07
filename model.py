@@ -180,8 +180,13 @@ def position_wise_feed_forward(x, ffn_params):
     h = ffn_first_layer_gelu(x, ffn_params)
     return ffn_second_layer(h, ffn_params)
 
-# Step 20 - compute_mean_variance (not yet solved)
-# TODO: implement
+# Step 20 - compute_mean_variance
+import numpy as np
+
+def compute_mean_variance(x, eps=1e-5):
+    """Compute per-feature mean and variance along the last axis of x."""
+    # TODO: return (mean, var) reduced along the last axis with that axis kept
+    return x.mean(axis=-1, keepdims=True), x.var(axis=-1, keepdims=True)
 
 # Step 21 - layer_norm_apply (not yet solved)
 # TODO: implement
