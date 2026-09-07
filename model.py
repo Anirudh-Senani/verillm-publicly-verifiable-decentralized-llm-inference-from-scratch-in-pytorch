@@ -205,8 +205,40 @@ def residual_add_and_norm(x, sublayer_output, ln_params, eps=1e-5):
     # TODO: combine the residual connection with layer normalization over the feature axis.
     return layer_norm_apply(x + sublayer_output, ln_params, eps)
 
-# Step 23 - transformer_block (not yet solved)
-# TODO: implement
+# Step 23 - transformer_block
+def transformer_block(x, block_params, kv_cache, query_offset=0):
+    # TODO: run attention (with KV cache) + FFN, each wrapped by residual add-and-norm
+    if 'W_q' in block_params['attn']:
+        block_params['attn']['Wq'] = block_params['attn']['W_q']
+    if 'b_q' in block_params['attn']:
+        block_params['attn']['bq'] = block_params['attn']['b_q']
+    if 'W_k' in block_params['attn']:
+        block_params['attn']['Wk'] = block_params['attn']['W_k']
+    if 'b_k' in block_params['attn']:
+        block_params['attn']['bk'] = block_params['attn']['b_k']
+    if 'W_v' in block_params['attn']:
+        block_params['attn']['Wv'] = block_params['attn']['W_v']
+    if 'b_v' in block_params['attn']:
+        block_params['attn']['bv'] = block_params['attn']['b_v']
+    if 'W_o' in block_params['attn']:
+        block_params['attn']['Wo'] = block_params['attn']['W_o']
+    if 'b_o' in block_params['attn']:
+        block_params['attn']['bo'] = block_params['attn']['b_o']
+
+    # if block_params['attn']:
+    #     try:
+    attn, kv_cache = single_head_causal_self_attention(x, block_params['attn'], kv_cache, query_offset)
+    x = residual_add_and_norm(x, attn, block_params['ln1'])
+        # except KeyError:
+        #     return x, kv_cache
+
+    # if block_params['ffn']:
+    #     try:
+    out = position_wise_feed_forward(x, block_params['ffn'])
+    x = residual_add_and_norm(x, out, block_params['ln2'])
+        # except KeyError:
+        #     return x, kv_cache
+    return x, kv_cache
 
 # Step 24 - lm_head_logits (not yet solved)
 # TODO: implement
