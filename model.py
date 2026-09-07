@@ -240,8 +240,10 @@ def transformer_block(x, block_params, kv_cache, query_offset=0):
         #     return x, kv_cache
     return x, kv_cache
 
-# Step 24 - lm_head_logits (not yet solved)
-# TODO: implement
+# Step 24 - lm_head_logits
+def lm_head_logits(hidden, lm_head_params):
+    # TODO: project hidden states to vocabulary logits via the LM head affine layer.
+    return linear_projection(hidden, lm_head_params['W'], lm_head_params.get('b', None))
 
 # Step 25 - greedy_next_token (not yet solved)
 # TODO: implement
