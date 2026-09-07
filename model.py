@@ -245,8 +245,12 @@ def lm_head_logits(hidden, lm_head_params):
     # TODO: project hidden states to vocabulary logits via the LM head affine layer.
     return linear_projection(hidden, lm_head_params['W'], lm_head_params.get('b', None))
 
-# Step 25 - greedy_next_token (not yet solved)
-# TODO: implement
+# Step 25 - greedy_next_token
+def greedy_next_token(logits):
+    # TODO: select the next token id by taking the argmax of the last logits row
+    if len(logits.shape) > 1:
+        logits = logits[-1]
+    return int(np.argmax(logits))
 
 # Step 26 - run_prefill (not yet solved)
 # TODO: implement
