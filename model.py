@@ -28,8 +28,10 @@ def encode_string(text, vocab):
     # TODO: convert text into a list of integer token ids using vocab['stoi'].
     return [vocab['stoi'][ch] for ch in text]
 
-# Step 3 - decode_ids (not yet solved)
-# TODO: implement
+# Step 3 - decode_ids
+def decode_ids(ids, vocab):
+    # TODO: decode a sequence of token ids back into the original string using vocab['itos'].
+    return "".join([vocab['itos'][ind] for ind in ids])
 
 # Step 4 - embed_tokens (not yet solved)
 # TODO: implement
