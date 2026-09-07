@@ -161,7 +161,7 @@ def single_head_causal_self_attention(x, attn_params, kv_cache, query_offset=0):
     kv_cache = append_kv_cache(kv_cache, k, v)
 
     context = scaled_dot_product_attention_with_cache(q, kv_cache, query_offset)
-    return apply_output_projection(context, attn_params)
+    return apply_output_projection(context, attn_params), kv_cache
 
 # Step 17 - ffn_first_layer_gelu (not yet solved)
 # TODO: implement
