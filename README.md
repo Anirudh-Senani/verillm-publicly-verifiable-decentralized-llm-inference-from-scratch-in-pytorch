@@ -27,7 +27,7 @@ python scaffold.py
 - [x] **15.** apply_output_projection
 - [x] **16.** single_head_causal_self_attention
 - [x] **17.** ffn_first_layer_gelu
-- [ ] **18.** ffn_second_layer
+- [x] **18.** ffn_second_layer
 - [ ] **19.** position_wise_feed_forward
 - [ ] **20.** compute_mean_variance
 - [ ] **21.** layer_norm_apply

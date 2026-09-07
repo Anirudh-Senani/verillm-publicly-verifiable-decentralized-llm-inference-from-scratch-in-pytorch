@@ -169,8 +169,10 @@ def ffn_first_layer_gelu(x, ffn_params):
     z = linear_projection(x, ffn_params['W1'], ffn_params.get('b1', None))
     return z/2 * (1 + np.tanh(((2/np.pi)**0.5) * (z + 0.044715 * z**3)))
 
-# Step 18 - ffn_second_layer (not yet solved)
-# TODO: implement
+# Step 18 - ffn_second_layer
+def ffn_second_layer(h, ffn_params):
+    # TODO: apply the second FFN linear layer mapping (T, d_ff) back to (T, d_model).
+    return linear_projection(h, ffn_params['W2'], ffn_params.get('b2', None))
 
 # Step 19 - position_wise_feed_forward (not yet solved)
 # TODO: implement
