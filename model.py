@@ -98,8 +98,12 @@ def softmax_attention_weights(masked_scores):
     shifted = np.exp(masked_scores - masked_scores.max(axis=-1, keepdims=True))
     return shifted/shifted.sum(axis=-1, keepdims=True)
 
-# Step 11 - weighted_value_sum (not yet solved)
-# TODO: implement
+# Step 11 - weighted_value_sum
+import numpy as np
+
+def weighted_value_sum(attn_weights, values):
+    # TODO: combine attention weights (Tq, Tk) with values (Tk, d_head) into context (Tq, d_head).
+    return attn_weights @ values
 
 # Step 12 - project_qkv (not yet solved)
 # TODO: implement
