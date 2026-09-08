@@ -436,8 +436,24 @@ def verify_merkle_inclusion_proof(leaf, leaf_index, proof, root):
 
     return current == root
 
-# Step 37 - run_prover (not yet solved)
-# TODO: implement
+# Step 37 - run_prover
+def run_prover(model_params, prompt_ids, num_steps):
+    # TODO: Generate num_steps tokens greedily and produce a Merkle leaf for every decode step.
+    if num_steps == 0:
+        return dict(
+            output_tokens=[],
+            step_states=[],
+            leaves=[]
+        )
+
+    completion = generate_with_state_log(prompt_ids, model_params, num_steps)
+    leaves = [commit_decode_step(step_state) for step_state in completion['step_states']]
+
+    return dict(
+        output_tokens=completion['generated_tokens'],
+        step_states=completion['step_states'],
+        leaves=leaves
+    )
 
 # Step 38 - assemble_public_transcript (not yet solved)
 # TODO: implement
