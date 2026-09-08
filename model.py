@@ -381,7 +381,7 @@ def build_merkle_level(nodes):
     # TODO: hash adjacent pairs of nodes, duplicating the last if odd, to form the next Merkle level.
     leaves = nodes
     if len(nodes)%2:
-        leaves = nodes + [nodes[-1]]
+        leaves += [nodes[-1]]
 
     parents = []
     for i in range(0, len(leaves), 2):
