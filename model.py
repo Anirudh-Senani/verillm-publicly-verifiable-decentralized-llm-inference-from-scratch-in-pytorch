@@ -336,8 +336,17 @@ def generate_with_state_log(prompt_ids, model_params, num_new_tokens):
         step_states=step_states
     )
 
-# Step 29 - hash_tensor (not yet solved)
-# TODO: implement
+# Step 29 - hash_tensor
+import hashlib
+import numpy as np
+
+def hash_tensor(tensor):
+    """Return a 32-byte SHA-256 digest of the tensor's shape, dtype, and contents."""
+    # TODO: canonically serialize the tensor and return sha256(...).digest()
+    hasher = hashlib.sha256()
+    hasher.update(np.ascontiguousarray(tensor).tobytes())
+    hasher.update(str(tensor.shape).encode('utf-8'))
+    return hasher.digest()
 
 # Step 30 - commit_decode_step (not yet solved)
 # TODO: implement
