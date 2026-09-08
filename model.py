@@ -380,16 +380,25 @@ def hash_pair(left_digest, right_digest):
 def build_merkle_level(nodes):
     # TODO: hash adjacent pairs of nodes, duplicating the last if odd, to form the next Merkle level.
     if len(nodes)%2:
-        nodes.append(nodes[-1])
+        leaves = nodes + [nodes[-1]]
+    else:
+        leaves = nodes
 
     parents = []
-    for i in range(0, len(nodes), 2):
-        parents.append(hash_pair(nodes[i], nodes[i+1]))
+    for i in range(0, len(leaves), 2):
+        parents.append(hash_pair(leaves[i], leaves[i+1]))
 
     return parents
 
-# Step 33 - build_merkle_tree (not yet solved)
-# TODO: implement
+# Step 33 - build_merkle_tree
+def build_merkle_tree(leaves):
+    # TODO: build the full Merkle tree as a list of levels from the given leaf digests.
+    levels = [leaves]
+    while len(leaves) != 1:
+        leaves = build_merkle_level(leaves)
+        levels.append(leaves)
+
+    return levels
 
 # Step 34 - merkle_root (not yet solved)
 # TODO: implement
