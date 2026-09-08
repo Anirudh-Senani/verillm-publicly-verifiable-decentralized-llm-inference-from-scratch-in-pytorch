@@ -274,8 +274,26 @@ def run_prefill(prompt_ids, model_params):
         next_pos=len(prompt_ids)
     )
 
-# Step 27 - decode_step (not yet solved)
-# TODO: implement
+# Step 27 - decode_step
+def decode_step(prev_token_id, kv_caches, next_pos, model_params):
+    # TODO: run one autoregressive decode step and return next_token, logits, kv_caches, next_pos.
+    token_embeds = embed_tokens([prev_token_id], model_params['token_embedding'])
+    x = add_positional_embeddings(token_embeds, model_params['pos_embedding'], start_pos=next_pos)
+
+    for i in range(len(kv_caches)):
+        x, kv_caches[i] = transformer_block(x, model_params['blocks'][i], kv_caches[i], next_pos)
+
+    x = layer_norm_apply(x, model_params['ln_f'])
+    logits = lm_head_logits(x, model_params['lm_head'])
+
+    next_token = greedy_next_token(logits)
+
+    return dict(
+        next_token=next_token,
+        logits=logits[0],
+        kv_caches=kv_caches,
+        next_pos=next_pos+1
+    )
 
 # Step 28 - generate_with_state_log (not yet solved)
 # TODO: implement
