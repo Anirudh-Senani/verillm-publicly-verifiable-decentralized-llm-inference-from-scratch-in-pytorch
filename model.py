@@ -348,8 +348,21 @@ def hash_tensor(tensor):
     hasher.update(str(tensor.shape).encode('utf-8'))
     return hasher.digest()
 
-# Step 30 - commit_decode_step (not yet solved)
-# TODO: implement
+# Step 30 - commit_decode_step
+def commit_decode_step(step_state):
+    # TODO: build a 32-byte Merkle leaf digest committing to every field of one decode step.
+    hasher = hashlib.sha256()
+    hasher.update(hash_tensor(np.array(step_state['step_index'])))
+    hasher.update(hash_tensor(np.array(step_state['input_token'])))
+    hasher.update(hash_tensor(np.array(step_state['next_token'])))
+    hasher.update(hash_tensor(step_state['logits']))
+    hasher.update(hash_tensor(np.array(step_state['next_pos'])))
+
+    for kv_cache in step_state['kv_caches']:
+        hasher.update(hash_tensor(kv_cache['k']))
+        hasher.update(hash_tensor(kv_cache['v']))
+
+    return hasher.digest()
 
 # Step 31 - hash_pair (not yet solved)
 # TODO: implement
