@@ -404,8 +404,25 @@ def merkle_root(tree):
     # TODO: return the Merkle root digest from a built tree (list of levels).
     return tree[-1][0]
 
-# Step 35 - merkle_inclusion_proof (not yet solved)
-# TODO: implement
+# Step 35 - merkle_inclusion_proof
+def merkle_inclusion_proof(tree, leaf_index):
+    # TODO: walk from the leaf level upward, recording each sibling and its side
+    siblings = []
+    if len(tree) <= 1:
+        return siblings
+
+    for level in tree[:-1]:
+        if leaf_index % 2 == 0:
+            if leaf_index == len(level)-1:
+                siblings.append({'sibling':level[leaf_index], 'is_right': True})
+            else:
+                siblings.append({'sibling':level[leaf_index+1], 'is_right': True})
+        else:
+            siblings.append({'sibling':level[leaf_index-1], 'is_right': False})
+
+        leaf_index = leaf_index//2
+
+    return siblings
 
 # Step 36 - verify_merkle_inclusion_proof (not yet solved)
 # TODO: implement
