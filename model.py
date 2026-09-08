@@ -252,8 +252,27 @@ def greedy_next_token(logits):
         logits = logits[-1]
     return int(np.argmax(logits))
 
-# Step 26 - run_prefill (not yet solved)
-# TODO: implement
+# Step 26 - run_prefill
+def run_prefill(prompt_ids, model_params):
+    """Run prefill over the prompt tokens and build the initial KV cache per layer."""
+    # TODO: embed tokens, add positional embeddings, run every block, apply final layer norm
+    embeddings = embed_tokens(prompt_ids, model_params['token_embedding'])
+    x = add_positional_embeddings(embeddings, model_params['pos_embedding'])
+    kv_caches = []
+
+    for block in model_params['blocks']:
+        kv_cache = {'k': None, 'v': None}
+        x, kv_cache = transformer_block(x, block, kv_cache)
+        kv_caches.append(kv_cache)
+
+    x = layer_norm_apply(x, model_params['ln_f'])
+    logits = lm_head_logits(x, model_params['lm_head'])
+
+    return dict(
+        hidden=x,
+        kv_caches=kv_caches,
+        next_pos=len(prompt_ids)
+    )
 
 # Step 27 - decode_step (not yet solved)
 # TODO: implement
