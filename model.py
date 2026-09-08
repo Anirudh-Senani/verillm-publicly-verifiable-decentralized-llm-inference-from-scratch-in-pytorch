@@ -295,8 +295,46 @@ def decode_step(prev_token_id, kv_caches, next_pos, model_params):
         next_pos=next_pos+1
     )
 
-# Step 28 - generate_with_state_log (not yet solved)
-# TODO: implement
+# Step 28 - generate_with_state_log
+def generate_with_state_log(prompt_ids, model_params, num_new_tokens):
+    """Run prefill, then decode num_new_tokens tokens, logging each step's state."""
+    # TODO: run prefill, then autoregressively decode while recording each step
+    prefill = run_prefill(prompt_ids, model_params)
+    kv_caches = prefill['kv_caches']
+    next_pos = prefill['next_pos']
+
+    x = prefill['hidden']
+    logits = lm_head_logits(x[-1], model_params['lm_head'])
+    prev_token_id = greedy_next_token(logits)
+    step_state = dict(
+        next_token=prev_token_id,
+        logits=logits,
+        kv_caches=kv_caches,
+        next_pos=next_pos
+    )
+
+    if num_new_tokens == 0:
+        return dict(
+            generated_tokens=[],
+            step_states=[]
+        )
+
+    step_states = [step_state]
+    generated_tokens = [prev_token_id]
+
+    for _ in range(num_new_tokens-1):
+        decode = decode_step(prev_token_id, kv_caches, next_pos, model_params)
+        step_states.append(decode)
+        prev_token_id = decode['next_token']
+        generated_tokens.append(prev_token_id)
+
+        kv_caches = decode['kv_caches']
+        next_pos = decode['next_pos']
+
+    return dict(
+        generated_tokens=generated_tokens,
+        step_states=step_states
+    )
 
 # Step 29 - hash_tensor (not yet solved)
 # TODO: implement
