@@ -376,8 +376,17 @@ def hash_pair(left_digest, right_digest):
 
     return hasher.digest()
 
-# Step 32 - build_merkle_level (not yet solved)
-# TODO: implement
+# Step 32 - build_merkle_level
+def build_merkle_level(nodes):
+    # TODO: hash adjacent pairs of nodes, duplicating the last if odd, to form the next Merkle level.
+    if len(nodes)%2:
+        nodes.append(nodes[-1])
+
+    parents = []
+    for i in range(0, len(nodes), 2):
+        parents.append(hash_pair(nodes[i], nodes[i+1]))
+
+    return parents
 
 # Step 33 - build_merkle_tree (not yet solved)
 # TODO: implement
