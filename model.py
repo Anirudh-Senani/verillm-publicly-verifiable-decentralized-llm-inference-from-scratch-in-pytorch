@@ -727,6 +727,14 @@ def run_malicious_round(model_params, prompt_ids, num_steps, verifier_ids, worke
         tampered_transcript=tampered['tampered_transcript']
     )
 
-# Step 57 - report_end_to_end_verification_cost (not yet solved)
-# TODO: implement
+# Step 57 - report_end_to_end_verification_cost
+def report_end_to_end_verification_cost(num_steps, committee_size, k):
+    # TODO: return a dict with per_verifier_fraction, committee_fraction, full_reexec_fraction.
+    per_verifier_fraction = verifier_cost_fraction(num_steps, k)
+
+    return dict(
+        per_verifier_fraction=per_verifier_fraction,
+        committee_fraction=per_verifier_fraction*committee_size,
+        full_reexec_fraction=1.0
+    )
 
