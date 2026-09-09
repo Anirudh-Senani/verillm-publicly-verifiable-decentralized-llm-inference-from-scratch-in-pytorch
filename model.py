@@ -552,7 +552,8 @@ def run_spot_check_verification(transcript, model_params, seed, k):
         recomputed_leaf = recompute_step_commitment(step_state, prior_kv_cache)
 
         audit = {}
-        audit['commitment_ok'] = check_commitment_against_proof(recomputed_leaf, ind, transcript['tree'], transcript['root'])
+        proof = merkle_inclusion_proof(transcript['tree'], ind)
+        audit['commitment_ok'] = check_commitment_against_proof(recomputed_leaf, ind, proof, transcript['root'])
         audit['token_ok'] = check_token_matches_claim(step['token'], transcript['output_tokens'][ind])
         per_audit.append(audit)
 
