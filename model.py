@@ -540,7 +540,16 @@ def run_spot_check_verification(transcript, model_params, seed, k):
         prior_kv_cache = transcript['step_states']['kv_chaches'][ind-1] if ind > 0 else []
         prior_token = transcript['output_tokens'][ind-1] if ind > 0 else 0
         step = reexecute_audited_step(model_params, prior_kv_cache, prior_token)
-        recomputed_leaf = recompute_step_commitment(step, prior_kv_cache)
+        step_state = dict(
+            step_index=ind,
+            input_token=prior_token,
+            next_token=state['next_token'],
+            logits=state['logits'],
+            next_pos=state['next_pos'],
+            kv_caches=state['kv_caches']
+        )
+
+        recomputed_leaf = recompute_step_commitment(step_state, prior_kv_cache)
 
         audit = {}
         audit['commitment_ok'] = check_commitment_against_proof(recomputed_leaf, ind, transcript['tree'], transcript['root'])
