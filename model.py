@@ -543,7 +543,7 @@ def run_spot_check_verification(transcript, model_params, seed, k):
         step_state = dict(
             step_index=ind,
             input_token=prior_token,
-            next_token=step['next_token'],
+            next_token=step['token'],
             logits=step['logits'],
             next_pos=step['next_pos'],
             kv_caches=step['kv_caches']
