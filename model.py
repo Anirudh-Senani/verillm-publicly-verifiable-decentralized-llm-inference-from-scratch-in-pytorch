@@ -545,7 +545,7 @@ def run_spot_check_verification(transcript, model_params, seed, k):
             input_token=prior_token,
             next_token=step['token'],
             logits=step['logits'],
-            next_pos=step['next_pos'],
+            next_pos=ind+1,
             kv_caches=step['kv_caches']
         )
 
