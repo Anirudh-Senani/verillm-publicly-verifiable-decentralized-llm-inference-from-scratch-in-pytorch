@@ -629,8 +629,19 @@ def aggregate_votes_majority(votes):
         reject_count=reject_count
     )
 
-# Step 52 - reward_honest_participants (not yet solved)
-# TODO: implement
+# Step 52 - reward_honest_participants
+def reward_honest_participants(balances, worker_id, votes, verdict, reward_worker, reward_verifier):
+    # TODO: credit worker on accept, and credit verifiers whose vote matches the verdict.
+    new_balances = balances.copy()
+
+    if verdict:
+        new_balances[worker_id] += reward_worker
+
+    for vote in votes:
+        if vote['vote']==verdict:
+            new_balances[vote['verifier_id']] += reward_verifier
+
+    return new_balances
 
 # Step 53 - slash_worker (not yet solved)
 # TODO: implement
