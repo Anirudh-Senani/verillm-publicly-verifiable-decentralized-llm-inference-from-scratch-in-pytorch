@@ -479,7 +479,9 @@ def sample_audit_positions(seed, num_steps, k):
 # Step 40 - reexecute_audited_step
 def reexecute_audited_step(model_params, prior_kv_cache, prior_token):
     # TODO: re-execute a single audited decode step from the committed prior KV cache and prior token.
-    next_pos = prior_kv_cache[0]['k'].shape[0]
+    next_pos = 0
+    if prior_kv_cache:
+        next_pos = prior_kv_cache[0]['k'].shape[0]
     decode = decode_step(prior_token, prior_kv_cache, next_pos, model_params)
     # token_embeds = embed_tokens([prior_token], model_params['token_embedding'])
     # x = add_positional_embeddings(token_embeds, model_params['pos_embedding'], start_pos=next_pos)
@@ -494,9 +496,9 @@ def reexecute_audited_step(model_params, prior_kv_cache, prior_token):
     # token = greedy_next_token(logits)
 
     return dict(
-        # hidden=x,
+        hidden=decode.get('hidden', None),
         logits=decode['logits'],
-        token=decode['next_token'],
+        token=int(decode['next_token']),
         kv_cache_after=decode['kv_caches']
     )
 
