@@ -265,7 +265,8 @@ def run_prefill(prompt_ids, model_params):
         x, kv_cache = transformer_block(x, block, kv_cache)
         kv_caches.append(kv_cache)
 
-    x = layer_norm_apply(x, model_params['ln_f'])
+    if 'ln_f' in model_params:
+        x = layer_norm_apply(x, model_params['ln_f'])
     logits = lm_head_logits(x, model_params['lm_head'])
 
     return dict(
@@ -684,8 +685,28 @@ def run_honest_round(model_params, prompt_ids, num_steps, verifier_ids, worker_i
         balances=new_balances
     )
 
-# Step 56 - run_malicious_round (not yet solved)
-# TODO: implement
+# Step 56 - run_malicious_round
+def run_malicious_round(model_params, prompt_ids, num_steps, verifier_ids, worker_id, committee_size, k, seed, balances, slash_amount, tamper_position, new_token):
+    # TODO: tamper a transcript, run committee verification, and slash on reject
+    prover_result = run_prover(model_params, prompt_ids, num_steps)
+    transcript = assemble_public_transcript(prover_result, prompt_ids)
+
+    tampered = show_tampered_transcript_rejected(transcript, model_params, tamper_position, new_token, seed, k)
+    committee = sample_verifier_committee(verifier_ids, committee_size, seed)
+    votes = collect_verifier_votes(committee, tampered['tampered_transcript'], model_params, k, seed)
+
+    aggregated = aggregate_votes_majority(votes)
+    verdict = aggregated['verdict']
+    new_balances = slash_worker(balances, worker_id, slash_amount)
+
+    return dict(
+        committee=committee,
+        votes=votes,
+        aggregated_counts=aggregated,
+        verdict=verdict,
+        balances=new_balances,
+        tampered_transcript=tampered['tampered_transcript']
+    )
 
 # Step 57 - report_end_to_end_verification_cost (not yet solved)
 # TODO: implement
