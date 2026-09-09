@@ -546,7 +546,7 @@ def run_spot_check_verification(transcript, model_params, seed, k):
             next_token=step['token'],
             logits=step['logits'],
             next_pos=ind+1,
-            kv_caches=step['kv_caches']
+            kv_caches=step['kv_cache_after']
         )
 
         recomputed_leaf = recompute_step_commitment(step_state, prior_kv_cache)
