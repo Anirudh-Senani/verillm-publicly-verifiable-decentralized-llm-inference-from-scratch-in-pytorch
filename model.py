@@ -393,6 +393,9 @@ def build_merkle_level(nodes):
 # Step 33 - build_merkle_tree
 def build_merkle_tree(leaves):
     # TODO: build the full Merkle tree as a list of levels from the given leaf digests.
+    if not leaves:
+        return leaves
+
     levels = [leaves]
     while len(leaves) != 1:
         leaves = build_merkle_level(leaves)
@@ -661,8 +664,25 @@ def assign_dual_role(node_ids, worker_id, committee_size, seed):
         committee=committee
     )
 
-# Step 55 - run_honest_round (not yet solved)
-# TODO: implement
+# Step 55 - run_honest_round
+def run_honest_round(model_params, prompt_ids, num_steps, verifier_ids, worker_id, committee_size, k, seed, balances, reward_worker, reward_verifier):
+    # TODO: run prover, assemble transcript, sample committee, collect votes, aggregate, then credit honest rewards.
+    prover_result = run_prover(model_params, prompt_ids, num_steps)
+    transcript = assemble_public_transcript(prover_result, prompt_ids)
+
+    committee = sample_verifier_committee(verifier_ids, committee_size, seed)
+    votes = collect_verifier_votes(committee, transcript, model_params, k, seed)
+
+    aggregated = aggregate_votes_majority(votes)
+    verdict = aggregated['verdict']
+    new_balances = reward_honest_participants(balances, worker_id, votes, verdict, reward_worker, reward_verifier)
+
+    return dict(
+        transcript=transcript,
+        votes=votes,
+        verdict=verdict,
+        balances=new_balances
+    )
 
 # Step 56 - run_malicious_round (not yet solved)
 # TODO: implement
