@@ -539,11 +539,29 @@ def run_spot_check_verification(transcript, model_params, seed, k):
         per_audit=per_audit
     )
 
-# Step 45 - tamper_transcript_flip_token (not yet solved)
-# TODO: implement
+# Step 45 - tamper_transcript_flip_token
+def tamper_transcript_flip_token(transcript, position, new_token):
+    # TODO: return a new transcript with output_tokens[position] replaced by new_token, leaves/root unchanged.
+    out = transcript.copy()
+    out['output_tokens'] = transcript['output_tokens'].copy()
+    out['output_tokens'][position] = new_token
 
-# Step 46 - detection_probability (not yet solved)
-# TODO: implement
+    return out
+
+# Step 46 - detection_probability
+import math
+
+
+def detection_probability(num_steps, num_corrupted, k):
+    # TODO: probability that k audits without replacement hit at least one corrupted step
+    if k > num_steps - num_corrupted:
+        return 1.0
+    elif k > num_steps:
+        return 0.0
+
+    n_nc_k = math.comb(num_steps-num_corrupted, k)
+    nck = math.comb(num_steps, k)
+    return 1 - n_nc_k/nck
 
 # Step 47 - verifier_cost_fraction (not yet solved)
 # TODO: implement
