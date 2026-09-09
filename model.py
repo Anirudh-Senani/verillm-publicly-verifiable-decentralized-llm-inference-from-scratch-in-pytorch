@@ -515,7 +515,7 @@ def run_spot_check_verification(transcript, model_params, seed, k):
     Returns a dict with keys 'accept', 'audited_positions', 'per_audit'.
     """
     # TODO: sample audit positions, re-execute each, check commitment and token, aggregate.
-    audited_positions = sample_audit_positions(seed, len(transcript), k)
+    audited_positions = sample_audit_positions(seed, len(transcript['step_states']), k)
     accept = True
 
     per_audit = []
@@ -587,8 +587,19 @@ def sample_verifier_committee(verifier_ids, committee_size, seed):
     # TODO: deterministically sample committee_size distinct ids from verifier_ids using seed.
     return random.Random(seed).sample(verifier_ids, committee_size)
 
-# Step 50 - collect_verifier_votes (not yet solved)
-# TODO: implement
+# Step 50 - collect_verifier_votes
+def collect_verifier_votes(committee, transcript, model_params, k, base_seed):
+    # TODO: each verifier runs an independent spot-check with a seed derived from base_seed.
+    votes = []
+
+    for verifier_id in committee:
+        vote = {}
+        vote['verifier_id'] = verifier_id
+        vote['result'] = run_spot_check_verification(transcript, model_params, base_seed+verifier_id, k)
+        vote['vote'] = vote['result']['accept']
+        votes.append(vote)
+
+    return votes
 
 # Step 51 - aggregate_votes_majority (not yet solved)
 # TODO: implement
