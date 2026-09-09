@@ -430,6 +430,8 @@ def verify_merkle_inclusion_proof(leaf, leaf_index, proof, root):
     # TODO: walk from leaf to root using sibling digests and return True iff root matches.
     current = leaf
     for sibling in proof:
+        if 'side' not in sibling:
+            sibling['side'] = 'right' if sibling['is_right'] else 'left'
         if sibling['side'] == 'right':
             current = hash_pair(current, sibling['sibling'])
         else:
@@ -496,8 +498,10 @@ def recompute_step_commitment(reexec_state, prior_kv_cache):
     # TODO: turn the re-executed decode-step state into the Merkle leaf digest the prover committed.
     return commit_decode_step(reexec_state)
 
-# Step 42 - check_commitment_against_proof (not yet solved)
-# TODO: implement
+# Step 42 - check_commitment_against_proof
+def check_commitment_against_proof(recomputed_leaf, leaf_index, proof, root):
+    # TODO: verify the recomputed leaf is included under root at leaf_index using the proof.
+    return verify_merkle_inclusion_proof(recomputed_leaf, leaf_index, proof, root)
 
 # Step 43 - check_token_matches_claim (not yet solved)
 # TODO: implement
