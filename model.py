@@ -406,7 +406,7 @@ def build_merkle_tree(leaves):
 # Step 34 - merkle_root
 def merkle_root(tree):
     # TODO: return the Merkle root digest from a built tree (list of levels).
-    return tree[-1][0]
+    return tree[-1][0] if tree else None
 
 # Step 35 - merkle_inclusion_proof
 def merkle_inclusion_proof(tree, leaf_index):
