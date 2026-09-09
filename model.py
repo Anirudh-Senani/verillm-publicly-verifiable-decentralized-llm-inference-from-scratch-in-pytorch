@@ -508,8 +508,36 @@ def check_token_matches_claim(recomputed_token, claimed_token):
     # TODO: return True iff the re-executed token id equals the claimed token id
     return recomputed_token == claimed_token
 
-# Step 44 - run_spot_check_verification (not yet solved)
-# TODO: implement
+# Step 44 - run_spot_check_verification
+def run_spot_check_verification(transcript, model_params, seed, k):
+    """Run end-to-end spot-check verification of a prover transcript.
+
+    Returns a dict with keys 'accept', 'audited_positions', 'per_audit'.
+    """
+    # TODO: sample audit positions, re-execute each, check commitment and token, aggregate.
+    audited_positions = sample_audit_positions(seed, len(transcript), k)
+    accept = True
+
+    per_audit = []
+    for ind in audited_positions:
+        prior_kv_cache = transcript['step_states']['kv_chaches'][ind-1] if ind > 0 else []
+        prior_token = transcript['output_tokens'][ind-1] if ind > 0 else 0
+        step = reexecute_audited_step(model_params, prior_kv_cache, prior_token)
+        recomputed_leaf = recompute_step_commitment(step, prior_kv_cache)
+
+        audit = {}
+        audit['commitment_ok'] = check_commitment_against_proof(recomputed_leaf, ind, transcript['tree'], transcript['root'])
+        audit['token_ok'] = check_token_matches_claim(step['token'], transcript['output_tokens'][ind])
+        per_audit.append(audit)
+
+        if not (audit['commitment_ok'] and audit['token_ok']):
+            accept = False
+
+    return dict(
+        accept=accept,
+        audited_positions=audited_positions,
+        per_audit=per_audit
+    )
 
 # Step 45 - tamper_transcript_flip_token (not yet solved)
 # TODO: implement
