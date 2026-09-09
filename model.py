@@ -712,12 +712,16 @@ def run_malicious_round(model_params, prompt_ids, num_steps, verifier_ids, worke
 
     aggregated = aggregate_votes_majority(votes)
     verdict = aggregated['verdict']
-    new_balances = slash_worker(balances, worker_id, slash_amount)
+    if not verdict:
+        new_balances = slash_worker(balances, worker_id, slash_amount)
+    else:
+        new_balances = balances.copy()
 
     return dict(
         committee=committee,
         votes=votes,
-        aggregated_counts=aggregated,
+        accept_count=aggregated['accept_count'],
+        reject_count=aggregated['reject_count'],
         verdict=verdict,
         balances=new_balances,
         tampered_transcript=tampered['tampered_transcript']
