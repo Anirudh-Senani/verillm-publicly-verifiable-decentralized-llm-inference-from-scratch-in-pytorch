@@ -483,17 +483,6 @@ def reexecute_audited_step(model_params, prior_kv_cache, prior_token):
     if prior_kv_cache:
         next_pos = prior_kv_cache[0]['k'].shape[0]
     decode = decode_step(prior_token, prior_kv_cache, next_pos, model_params)
-    # token_embeds = embed_tokens([prior_token], model_params['token_embedding'])
-    # x = add_positional_embeddings(token_embeds, model_params['pos_embedding'], start_pos=next_pos)
-
-    # kv_cache_after = prior_kv_cache
-    # for i in range(len(prior_kv_cache)):
-    #     x, kv_caches_after[i] = transformer_block(x, model_params['blocks'][i], prior_kv_cache[i], next_pos)
-
-    # x = layer_norm_apply(x, model_params['ln_f'])
-    # logits = lm_head_logits(x, model_params['lm_head'])
-
-    # token = greedy_next_token(logits)
 
     return dict(
         hidden=decode.get('hidden', None),
