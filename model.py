@@ -537,7 +537,7 @@ def run_spot_check_verification(transcript, model_params, seed, k):
 
     audited_positions = sample_audit_positions(seed, len(transcript['output_tokens']), k)
     for ind in audited_positions:
-        prior_kv_cache = transcript['step_states']['kv_chaches'][ind-1] if ind > 0 else []
+        prior_kv_cache = transcript['step_states'][ind-1]['kv_caches'] if ind > 0 else []
         prior_token = transcript['output_tokens'][ind-1] if ind > 0 else 0
         step = reexecute_audited_step(model_params, prior_kv_cache, prior_token)
         step_state = dict(
