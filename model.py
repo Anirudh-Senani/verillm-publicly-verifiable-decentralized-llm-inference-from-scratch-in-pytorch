@@ -515,10 +515,18 @@ def run_spot_check_verification(transcript, model_params, seed, k):
     Returns a dict with keys 'accept', 'audited_positions', 'per_audit'.
     """
     # TODO: sample audit positions, re-execute each, check commitment and token, aggregate.
-    audited_positions = sample_audit_positions(seed, len(transcript['step_states']), k)
     accept = True
-
+    audited_positions = []
     per_audit = []
+
+    if len(transcript['output_tokens']) < k:
+        return dict(
+            accept=accept,
+            audited_positions=audited_positions,
+            per_audit=per_audit
+        )
+
+    audited_positions = sample_audit_positions(seed, len(transcript['step_states']), k)
     for ind in audited_positions:
         prior_kv_cache = transcript['step_states']['kv_chaches'][ind-1] if ind > 0 else []
         prior_token = transcript['output_tokens'][ind-1] if ind > 0 else 0
