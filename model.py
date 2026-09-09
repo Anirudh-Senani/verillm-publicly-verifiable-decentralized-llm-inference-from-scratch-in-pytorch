@@ -292,7 +292,8 @@ def decode_step(prev_token_id, kv_caches, next_pos, model_params):
         next_token=next_token,
         logits=logits[0],
         kv_caches=kv_caches,
-        next_pos=next_pos+1
+        next_pos=next_pos+1,
+        hidden=x
     )
 
 # Step 28 - generate_with_state_log
@@ -475,8 +476,29 @@ def sample_audit_positions(seed, num_steps, k):
     # TODO: deterministically sample k distinct sorted indices in [0, num_steps) from the seed.
     return sorted(random.Random(seed).sample(range(num_steps), k))
 
-# Step 40 - reexecute_audited_step (not yet solved)
-# TODO: implement
+# Step 40 - reexecute_audited_step
+def reexecute_audited_step(model_params, prior_kv_cache, prior_token):
+    # TODO: re-execute a single audited decode step from the committed prior KV cache and prior token.
+    next_pos = prior_kv_cache[0]['k'].shape[0]
+    decode = decode_step(prior_token, prior_kv_cache, next_pos, model_params)
+    # token_embeds = embed_tokens([prior_token], model_params['token_embedding'])
+    # x = add_positional_embeddings(token_embeds, model_params['pos_embedding'], start_pos=next_pos)
+
+    # kv_cache_after = prior_kv_cache
+    # for i in range(len(prior_kv_cache)):
+    #     x, kv_caches_after[i] = transformer_block(x, model_params['blocks'][i], prior_kv_cache[i], next_pos)
+
+    # x = layer_norm_apply(x, model_params['ln_f'])
+    # logits = lm_head_logits(x, model_params['lm_head'])
+
+    # token = greedy_next_token(logits)
+
+    return dict(
+        # hidden=x,
+        logits=decode['logits'],
+        token=decode['next_token'],
+        kv_cache_after=decode['kv_caches']
+    )
 
 # Step 41 - recompute_step_commitment (not yet solved)
 # TODO: implement
