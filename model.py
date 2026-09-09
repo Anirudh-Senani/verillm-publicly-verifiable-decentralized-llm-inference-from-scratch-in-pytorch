@@ -284,7 +284,8 @@ def decode_step(prev_token_id, kv_caches, next_pos, model_params):
     for i in range(len(kv_caches)):
         x, kv_caches[i] = transformer_block(x, model_params['blocks'][i], kv_caches[i], next_pos)
 
-    x = layer_norm_apply(x, model_params['ln_f'])
+    if 'ln_f' in model_params:
+        x = layer_norm_apply(x, model_params['ln_f'])
     logits = lm_head_logits(x, model_params['lm_head'])
 
     next_token = greedy_next_token(logits)
