@@ -563,8 +563,10 @@ def detection_probability(num_steps, num_corrupted, k):
     nck = math.comb(num_steps, k)
     return 1 - n_nc_k/nck
 
-# Step 47 - verifier_cost_fraction (not yet solved)
-# TODO: implement
+# Step 47 - verifier_cost_fraction
+def verifier_cost_fraction(num_steps, k):
+    # TODO: return k/num_steps as a float in [0, 1] representing audit cost vs full re-execution.
+    return k/num_steps
 
 # Step 48 - show_tampered_transcript_rejected (not yet solved)
 # TODO: implement
