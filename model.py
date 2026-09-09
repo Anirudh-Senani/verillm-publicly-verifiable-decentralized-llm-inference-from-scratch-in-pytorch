@@ -491,8 +491,10 @@ def reexecute_audited_step(model_params, prior_kv_cache, prior_token):
         kv_cache_after=decode['kv_caches']
     )
 
-# Step 41 - recompute_step_commitment (not yet solved)
-# TODO: implement
+# Step 41 - recompute_step_commitment
+def recompute_step_commitment(reexec_state, prior_kv_cache):
+    # TODO: turn the re-executed decode-step state into the Merkle leaf digest the prover committed.
+    return commit_decode_step(reexec_state)
 
 # Step 42 - check_commitment_against_proof (not yet solved)
 # TODO: implement
