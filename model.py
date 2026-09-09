@@ -651,8 +651,15 @@ def slash_worker(balances, worker_id, slash_amount):
 
     return new_balances
 
-# Step 54 - assign_dual_role (not yet solved)
-# TODO: implement
+# Step 54 - assign_dual_role
+def assign_dual_role(node_ids, worker_id, committee_size, seed):
+    # TODO: draw a committee from node_ids and ensure worker_id is included.
+    node_ids.remove(worker_id)
+    committee = sample_verifier_committee(node_ids, committee_size-1, seed) + [worker_id]
+    return dict(
+        worker_id=worker_id,
+        committee=committee
+    )
 
 # Step 55 - run_honest_round (not yet solved)
 # TODO: implement
