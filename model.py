@@ -322,11 +322,13 @@ def generate_with_state_log(prompt_ids, model_params, num_new_tokens):
             step_states=[]
         )
 
+    step_state['step_index'] = 0
     step_states = [step_state]
     generated_tokens = [prev_token_id]
 
-    for _ in range(num_new_tokens-1):
+    for i in range(num_new_tokens-1):
         decode = decode_step(prev_token_id, kv_caches, next_pos, model_params)
+        decode['step_index'] = i+1
         step_states.append(decode)
         prev_token_id = decode['next_token']
         generated_tokens.append(prev_token_id)
