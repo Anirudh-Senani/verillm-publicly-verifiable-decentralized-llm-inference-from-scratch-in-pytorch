@@ -568,8 +568,17 @@ def verifier_cost_fraction(num_steps, k):
     # TODO: return k/num_steps as a float in [0, 1] representing audit cost vs full re-execution.
     return k/num_steps
 
-# Step 48 - show_tampered_transcript_rejected (not yet solved)
-# TODO: implement
+# Step 48 - show_tampered_transcript_rejected
+def show_tampered_transcript_rejected(transcript, model_params, position, new_token, seed, k):
+    # TODO: tamper the transcript at `position` with `new_token` and run spot-check verification.
+    tampered_transcript = tamper_transcript_flip_token(transcript, position, new_token)
+    result = run_spot_check_verification(tampered_transcript, model_params, seed, k)
+
+    return dict(
+        tampered_transcript=tampered_transcript,
+        result=result,
+        rejected=not result['accept']
+    )
 
 # Step 49 - sample_verifier_committee (not yet solved)
 # TODO: implement
