@@ -543,10 +543,10 @@ def run_spot_check_verification(transcript, model_params, seed, k):
         step_state = dict(
             step_index=ind,
             input_token=prior_token,
-            next_token=state['next_token'],
-            logits=state['logits'],
-            next_pos=state['next_pos'],
-            kv_caches=state['kv_caches']
+            next_token=step['next_token'],
+            logits=step['logits'],
+            next_pos=step['next_pos'],
+            kv_caches=step['kv_caches']
         )
 
         recomputed_leaf = recompute_step_commitment(step_state, prior_kv_cache)
